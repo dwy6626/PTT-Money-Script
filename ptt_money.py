@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-from PyPtt import PTT
+from PyPtt import PTT, exceptions
 
 import random
 from getpass import getpass
@@ -15,7 +15,7 @@ samples = 33
 
 
 # some check
-assert samples >= floor
+assert samples <= floor
 
 
 # get data
@@ -50,6 +50,7 @@ print("恭喜以上 id 中獎，開始發錢\n")
 # login
 ptt_bot = PTT.API(
     screen_time_out=5,
+    log_level=PTT.log.level.TRACE
 )
 password = getpass()
 try:
@@ -68,8 +69,11 @@ ptt_bot.log('登入成功')
 
 # give money
 for a in atari:
-    ptt_bot.give_money(a, 49)
-
+    try:
+        ptt_bot.give_money(a, 49)
+    except exceptions.UnknownError:
+        ptt_bot.logout()
+        break
 
 # end program
 ptt_bot.logout()
