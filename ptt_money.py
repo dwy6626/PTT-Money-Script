@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-from PyPtt import PTT, exceptions
+from PyPtt import PTT
 
 import random
 from getpass import getpass
@@ -70,8 +70,9 @@ ptt_bot.log('登入成功')
 # give money
 for a in atari:
     try:
-        ptt_bot.give_money(a, 49)
-    except exceptions.UnknownError:
+        ptt_bot.give_money(a, amount)
+    except Exception as e:
+        print('exception occurred:', e)
         ptt_bot.logout()
         break
 
